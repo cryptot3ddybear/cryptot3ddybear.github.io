@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>security on Blockchain Security Stories</title><link>/tags/security/</link><description>Recent content in security on Blockchain Security Stories</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 11 Apr 2021 15:21:09 +0200</lastBuildDate><atom:link href="/tags/security/index.xml" rel="self" type="application/rss+xml"/><item><title>BSC-SCAM: Stealthy Liquidity Pool Block on PancakeSwap</title><link>/posts/scam-explained-bsc-stealthy-lp-block/</link><pubDate>Sun, 11 Apr 2021 15:21:09 +0200</pubDate><guid>/posts/scam-explained-bsc-stealthy-lp-block/</guid><description>A guide for crypto traders and a technical analysis of a popular Binance Smart Chain smart contract scam resulting in an inability to swap a token back due to transferFrom error on PancakeSwap.
+Yesterday I received a message from TokenSniffer regarding another token SafeBinance with swapping issues and a clue that there is a weird instruction restricting somehow a to address in a transfer function.
+As it turns out the token might be a part of a bigger scam campaign and cool TokenSniffer's feature listed multiple similar tokens deployed during the last few days.</description><content>&lt;p>A guide for crypto traders and a technical analysis of a popular
+Binance Smart Chain smart contract scam resulting in an inability to swap
+a token back due to &lt;code>transferFrom&lt;/code> error on PancakeSwap.&lt;/p>
+&lt;p>Yesterday I received a message from TokenSniffer regarding another token
+&lt;em>SafeBinance&lt;/em> with swapping issues and a clue that there is a weird
+instruction restricting somehow a &lt;code>to&lt;/code> address in a &lt;code>transfer&lt;/code> function.&lt;/p>
+&lt;p>As it turns out the token might be a part of a bigger scam campaign and
+cool TokenSniffer's feature listed multiple similar tokens deployed
+during the last few days. Here are a few examples:&lt;/p>
+&lt;ul>
+&lt;li>SafeRocket&lt;/li>
+&lt;li>SafeCoinToken&lt;/li>
+&lt;li>FairSafeApe&lt;/li>
+&lt;li>SAFEMOUSE&lt;/li>
+&lt;li>SAFEROCKET&lt;/li>
+&lt;li>and many more (you can find TokenSniffer's similar token contracts
+feature, similarity score 0.9362 seems to match them quite well).&lt;/li>
+&lt;/ul>
+&lt;p>The initial #SCAMToken target was #SafeBinance, but when I checked the
+message and similar tokens it turned out there was a newer one
+(#SafeRocker) released a few mins earlier and looked like it is still
+active, so I decided to start with that one.&lt;/p>
+&lt;p>For quick info how to recognize this exact scam for non-tech people, go
+to for traders section.&lt;/p>
+&lt;h1 id="targets">Targets&lt;/h1>
+&lt;ul>
+&lt;li>initial target: #SafeBinance
+&lt;ul>
+&lt;li>&lt;a href="https://bscscan.com/token/0x612a8f4d3eacb6526d7a5e2c7c8c15c1c4dc5319">https://bscscan.com/token/0x612a8f4d3eacb6526d7a5e2c7c8c15c1c4dc5319&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://tokensniffer.com/token/0x612a8f4d3eacb6526d7a5e2c7c8c15c1c4dc5319">https://tokensniffer.com/token/0x612a8f4d3eacb6526d7a5e2c7c8c15c1c4dc5319&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>on-going scam similar to SafeBinance and analysed in this write-up:
+SafeRocket
+&lt;ul>
+&lt;li>&lt;a href="https://bscscan.com/token/0x331bb194dc931c79351234733d69dc0f6b8b482a">https://bscscan.com/token/0x331bb194dc931c79351234733d69dc0f6b8b482a&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h1 id="tldr">TLDR;&lt;/h1>
+&lt;p>The scammer uses a condition in &lt;code>transferFrom&lt;/code> methods to block
+transfers originating from PancakeSwap Liquidity Pool for the scam. The
+address of the PancakeSwap LP is set during the very first interaction
+of the pool with the contract via add liquidity at the beginning, so the
+variable &lt;code>newun&lt;/code> is set exactly to the address of a Liquidity Pool for
+that token. When the variable is set swaps back are not working as
+contract blocks transfers from Liquidity pool to the users, wht results
+in &lt;code>transferFrom&lt;/code> error message in PancakeSwap. The value of the coin
+increases and due to the AMM mechanics the scammer to cash out pulls
+back his LP token with a profit.&lt;/p>
+&lt;h1 id="for-traders">For Traders&lt;/h1>
+&lt;ul>
+&lt;li>the SCAMToken has a total supply of 1,000,000,000,000,000 tokens and
+18 decimals and all of the similar ones have exactly the same total
+supply, but it's quite a weak indicator of this scam and can be
+easily modified by the scammers&lt;/li>
+&lt;li>nearly all transactions are from
+&lt;code>PancakeSwap: &amp;lt;SCAM TOKEN Liquidity pool&amp;gt;&lt;/code> to the &lt;code>victim address&lt;/code>
+(swapping something to SCAMToken) and there are very few where the
+recipient is different indicating that people are buying tokens only
+and nobody is actually swapping it back (also typical for fresh
+tokens where people tend to hold at the beginning)&lt;/li>
+&lt;li>&lt;strong>IMPORTANT&lt;/strong> go to BSCScan and the contract of the token, for
+instance in this SCAMEToken
+&lt;code>https://bscscan.com/address/0x331bb194dc931c79351234733d69dc0f6b8b482a#readContract&lt;/code>
+and look for &lt;code>newun&lt;/code> variable or any other variable (if scammer
+renames it) which is set to the address of the PancakeSwap Liquidity
+Pool of that SCAMToken&lt;/li>
+&lt;li>In the transactions log it looks like:
+&lt;ul>
+&lt;li>the very first (oldest) transaction is as usual generate coins
+from the &lt;code>0x0&lt;/code> address to the contract's owner wallet&lt;/li>
+&lt;li>the next one (second oldest) is a regular transfer of a big part
+of the supply to a dead address (burn)&lt;/li>
+&lt;li>then the scammer adds liquidity to PancakeSwap and sets the
+&lt;code>newun&lt;/code> variable&lt;/li>
+&lt;li>from this moment users are able to swap to SCAMToken, but they
+are not able to swap-back, due to a blocked transfers from
+PancakeSwap Liquidity Pool&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>to cash out the scammer pulls the liquidity with a profit&lt;/li>
+&lt;/ul>
+&lt;h1 id="technical-analysis">Technical Analysis&lt;/h1>
+&lt;h2 id="introduction">Introduction&lt;/h2>
+&lt;p>To understand the scam a brief high-level knoweldge of a swap
+transaction performed by DEX like PancakeSwap is necessary. I'm neither
+solidity nor a blockchain developer, thus it's a pure analysis based on
+a notepad, bscscan.com and google. I read my own swapping transactions
+and the code of the contract and came up with a hypothesis how it works.
+Naturally, solidity developers are more than welcome to point out
+anything that is wrong in the proces I described. Just drop me a
+message.&lt;/p>
+&lt;h2 id="pancakeswap-swap-transactions">PancakeSwap swap transactions&lt;/h2>
+&lt;h3 id="swap-bnb-sometoken">Swap BNB-&amp;gt;SomeToken&lt;/h3>
+&lt;p>Basically when somebody wants to buy a token on PancakeSwap or a similar
+decentralized exchange he or she needs to swap usually some BNB (in case
+of the Binance Smart Chain) for the final token he or she wants.
+Swapping different tokens than the main network's token are also
+possible, but it complicates the process, so BNB-&amp;gt;SomeToken is a basic
+and the easiest example and will be the base for the analysis.&lt;/p>
+&lt;p>After a swap a new transaction should be present in the wallet and it
+can be reviewed in BscScan. The transaction's details consists of this
+the most crucial fields:&lt;/p>
+&lt;pre>&lt;code>From: &amp;lt;buyer wallet address&amp;gt;
+To : &amp;lt;contract address of PancakeRouter&amp;gt;
+Tokens Transferred:
+From PancakeSwap Router
+to PancakeSwap: SomeToken Liquidity Pool (BNB buyer pays)
+From PancakeSwap Some Token Liquidity Pool
+to &amp;lt;buyer wallet address&amp;gt; (some number of SomeToken)
+&lt;/code>&lt;/pre>
+&lt;p>However, in details after a quick googling in the Logs tab in BscScan
+there are more specific actions which are titled
+&lt;code>Transaction Reciept Event Logs&lt;/code> and in short it lists the following 5
+events:&lt;/p>
+&lt;pre>&lt;code>1. Deposit BNB from buyer's wallet to PancakeSwap Router
+2. Transfer deposited BNB from PancakeSwap Router to PancakeSwap Liquidity Pool for SomeToken
+3. (IMPORTANT) Transfer form PancakeSwap Liquidity Pool for SomeToken to buyer's wallet
+4. PancakeSwap Liquidity Pool sync.
+5. PancakeSwap Liquidity Pool swap
+&lt;/code>&lt;/pre>
+&lt;p>Events 1 and 2 involve BNB contract (WBNB to be more precise in my
+cases). Actions 3 involves SomeToken's contract (invoking
+&lt;code>transferFrom&lt;/code> method from SomeToken's contract and generating Transfer
+event). Actions 4 and 5 are involving
+&lt;code>PancakeSwap Liquidity Pool for SomeToken&lt;/code> contract.&lt;/p>
+&lt;h3 id="swap-sometoken-bnb">Swap SomeToken-&amp;gt;BNB&lt;/h3>
+&lt;p>The swap back process looks very similar, but it first requires an
+Approval action, which takes only network's fee and allows to swap
+SomeToken to other token. After confirming that it will be visible in
+wallet's transactions list, however details or approval are irrelevant
+for this analysis. Then the actual swap can be done and when it is
+performed it will be also listed in wallet's transactions list as
+following (the most crucial fields):&lt;/p>
+&lt;pre>&lt;code> From: &amp;lt;buyer's wallet address&amp;gt;
+Interacted With (To): &amp;lt;contract address of PancakeRouter&amp;gt;
+Transaction action: Swap
+Tokens Transferred:
+From &amp;lt;buyer's wallet&amp;gt; to PancakeSwap Liquidity Pool for SomeToken
+From PancakeSwap Liquidity Pool for SomeToken to PancakeSwap Router
+&lt;/code>&lt;/pre>&lt;p>Again in details in Logs tab events can be previewed and in short it
+lists the following 6 events:&lt;/p>
+&lt;pre>&lt;code>1. (IMPORTANT) Transfer SomeToken from buyer's wallet to PancakeSwap Liquidity Pool of SomeToken
+2. (IMPORTANT) Approval
+3. Transfer BNB from PancakeSwap Liquidity Pool to PancakeSwap Router
+4. PancakeSwap Liquidity Pool for SomeToken sync
+5. PancakeSwap Liquidity Pool for SomeToken swap
+6. Withdrawal BNB
+&lt;/code>&lt;/pre>
+&lt;p>Actions 1 and 2 interact with SomeToken's contract (transferFrom),
+action 3 interacts with BNB (WBNB) contract, action 4 and 5 interacts
+with PancakeSwap Liquidity Pool and the last one does the withdrawal and
+it involves BNB (WBNB) contract.&lt;/p>
+&lt;h3 id="add-liquidity-super-short-version">Add liquidity (super short version)&lt;/h3>
+&lt;p>To make the description complete, there is a last puzzle in this whole
+process, so liquidity adding. In short to allow swapping a funds of both
+tokens of the pair has to be added to the liquidity pool. It can be seen
+in the transaction's log of the token as and entry with annotation in
+Transaction Action field like&lt;/p>
+&lt;pre>&lt;code>Transaction Action: Add XXX SAFEROCKET And YYY BNB Liquidity To PancakeSwap
+&lt;/code>&lt;/pre>
+&lt;p>Wihtout diving into details the add liquidity generates 8 log events and
+in short they are:&lt;/p>
+&lt;pre>&lt;code>1. PairCreated (Involving PancakeSwap factory contract) creating an address of PancakeSwap Liquidity Pool of SomeToken
+2. (IMPORTANT) Transfer (Involving transferFrom method of SomeToken's contract) to transfer SomeToken funds of the person adding liquidity
+3. Deposit BNB in PancakeSwap router (Involving BNB contract)
+4. Transfer deposited BNB from PancakeSwap router to PancakeSwap Liquidity Pool of SomeToken
+5 to 8 log events are handling PancakeSwap LiquidityPool tokens, sent to the person adding liquidity.
+&lt;/code>&lt;/pre>
+&lt;p>At the beginning action 1 creates a pari using PancakeSwap router and
+then there is a transfer. This action 2 (Transfer) is the most important
+in this analysis as it invokes &lt;code>transferFrom&lt;/code> method inside the
+SomeToken's contract. Later there is a transfer of the second token and
+Liquidity Pool token distribution.&lt;/p>
+&lt;h2 id="the-actual-scam-in-saferocket-safebinance-and-the-whole-family">The actual scam in SafeRocket (SafeBinance) and the whole family&lt;/h2>
+&lt;p>SafeRocket: &lt;code>https://bscscan.com/token/0x331bb194dc931c79351234733d69dc0f6b8b482a&lt;/code>&lt;/p>
+&lt;p>With the basics behind swap described it should be easy to understand
+how this scam works in details.&lt;/p>
+&lt;p>During the swap process, there are a few places where the code of the
+contract is invoked and that code was written by a malicious developer
+(or copy-pasted), thus can cause the malfunction. In the previous
+description all such places were marked as &lt;strong>(IMPORTANT)&lt;/strong> and below you
+can find the listing of the most crucial invoked methods:
+&lt;code>transfernewun&lt;/code>, &lt;code>transfer&lt;/code>, &lt;code>approval&lt;/code> and &lt;code>transferFrom&lt;/code>.&lt;/p>
+&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-javascript" data-lang="javascript"> &lt;span style="color:#66d9ef">function&lt;/span> &lt;span style="color:#a6e22e">transfernewun&lt;/span>(&lt;span style="color:#a6e22e">address&lt;/span> &lt;span style="color:#a6e22e">_newun&lt;/span>) &lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#a6e22e">onlyOwner&lt;/span> {
+&lt;span style="color:#a6e22e">newun&lt;/span> &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#a6e22e">_newun&lt;/span>;
+}
+&lt;span style="color:#66d9ef">function&lt;/span> &lt;span style="color:#a6e22e">transfer&lt;/span>(&lt;span style="color:#a6e22e">address&lt;/span> &lt;span style="color:#a6e22e">to&lt;/span>, &lt;span style="color:#a6e22e">uint&lt;/span> &lt;span style="color:#a6e22e">tokens&lt;/span>) &lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#a6e22e">returns&lt;/span> (&lt;span style="color:#a6e22e">bool&lt;/span> &lt;span style="color:#a6e22e">success&lt;/span>) {
+&lt;span style="color:#a6e22e">require&lt;/span>(&lt;span style="color:#a6e22e">to&lt;/span> &lt;span style="color:#f92672">!=&lt;/span> &lt;span style="color:#a6e22e">newun&lt;/span>, &lt;span style="color:#e6db74">&amp;#34;please wait&amp;#34;&lt;/span>);
+&lt;span style="color:#a6e22e">balances&lt;/span>[&lt;span style="color:#a6e22e">msg&lt;/span>.&lt;span style="color:#a6e22e">sender&lt;/span>] &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#a6e22e">balances&lt;/span>[&lt;span style="color:#a6e22e">msg&lt;/span>.&lt;span style="color:#a6e22e">sender&lt;/span>].&lt;span style="color:#a6e22e">sub&lt;/span>(&lt;span style="color:#a6e22e">tokens&lt;/span>);
+&lt;span style="color:#a6e22e">balances&lt;/span>[&lt;span style="color:#a6e22e">to&lt;/span>] &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#a6e22e">balances&lt;/span>[&lt;span style="color:#a6e22e">to&lt;/span>].&lt;span style="color:#a6e22e">add&lt;/span>(&lt;span style="color:#a6e22e">tokens&lt;/span>);
+&lt;span style="color:#a6e22e">emit&lt;/span> &lt;span style="color:#a6e22e">Transfer&lt;/span>(&lt;span style="color:#a6e22e">msg&lt;/span>.&lt;span style="color:#a6e22e">sender&lt;/span>, &lt;span style="color:#a6e22e">to&lt;/span>, &lt;span style="color:#a6e22e">tokens&lt;/span>);
+&lt;span style="color:#66d9ef">return&lt;/span> &lt;span style="color:#66d9ef">true&lt;/span>;
+}
+&lt;span style="color:#66d9ef">function&lt;/span> &lt;span style="color:#a6e22e">approve&lt;/span>(&lt;span style="color:#a6e22e">address&lt;/span> &lt;span style="color:#a6e22e">spender&lt;/span>, &lt;span style="color:#a6e22e">uint&lt;/span> &lt;span style="color:#a6e22e">tokens&lt;/span>) &lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#a6e22e">returns&lt;/span> (&lt;span style="color:#a6e22e">bool&lt;/span> &lt;span style="color:#a6e22e">success&lt;/span>) {
+&lt;span style="color:#a6e22e">allowed&lt;/span>[&lt;span style="color:#a6e22e">msg&lt;/span>.&lt;span style="color:#a6e22e">sender&lt;/span>][&lt;span style="color:#a6e22e">spender&lt;/span>] &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#a6e22e">tokens&lt;/span>;
+&lt;span style="color:#a6e22e">emit&lt;/span> &lt;span style="color:#a6e22e">Approval&lt;/span>(&lt;span style="color:#a6e22e">msg&lt;/span>.&lt;span style="color:#a6e22e">sender&lt;/span>, &lt;span style="color:#a6e22e">spender&lt;/span>, &lt;span style="color:#a6e22e">tokens&lt;/span>);
+&lt;span style="color:#66d9ef">return&lt;/span> &lt;span style="color:#66d9ef">true&lt;/span>;
+}
+&lt;span style="color:#66d9ef">function&lt;/span> &lt;span style="color:#a6e22e">transferFrom&lt;/span>(&lt;span style="color:#a6e22e">address&lt;/span> &lt;span style="color:#a6e22e">from&lt;/span>, &lt;span style="color:#a6e22e">address&lt;/span> &lt;span style="color:#a6e22e">to&lt;/span>, &lt;span style="color:#a6e22e">uint&lt;/span> &lt;span style="color:#a6e22e">tokens&lt;/span>) &lt;span style="color:#66d9ef">public&lt;/span> &lt;span style="color:#a6e22e">returns&lt;/span> (&lt;span style="color:#a6e22e">bool&lt;/span> &lt;span style="color:#a6e22e">success&lt;/span>) {
+&lt;span style="color:#66d9ef">if&lt;/span>(&lt;span style="color:#a6e22e">from&lt;/span> &lt;span style="color:#f92672">!=&lt;/span> &lt;span style="color:#a6e22e">address&lt;/span>(&lt;span style="color:#ae81ff">0&lt;/span>) &lt;span style="color:#f92672">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#a6e22e">newun&lt;/span> &lt;span style="color:#f92672">==&lt;/span> &lt;span style="color:#a6e22e">address&lt;/span>(&lt;span style="color:#ae81ff">0&lt;/span>)) &lt;span style="color:#a6e22e">newun&lt;/span> &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#a6e22e">to&lt;/span>;
+&lt;span style="color:#66d9ef">else&lt;/span> &lt;span style="color:#a6e22e">require&lt;/span>(&lt;span style="color:#a6e22e">to&lt;/span> &lt;span style="color:#f92672">!=&lt;/span> &lt;span style="color:#a6e22e">newun&lt;/span>, &lt;span style="color:#e6db74">&amp;#34;please wait&amp;#34;&lt;/span>);
+&lt;span style="color:#a6e22e">balances&lt;/span>[&lt;span style="color:#a6e22e">from&lt;/span>] &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#a6e22e">balances&lt;/span>[&lt;span style="color:#a6e22e">from&lt;/span>].&lt;span style="color:#a6e22e">sub&lt;/span>(&lt;span style="color:#a6e22e">tokens&lt;/span>);
+&lt;span style="color:#a6e22e">allowed&lt;/span>[&lt;span style="color:#a6e22e">from&lt;/span>][&lt;span style="color:#a6e22e">msg&lt;/span>.&lt;span style="color:#a6e22e">sender&lt;/span>] &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#a6e22e">allowed&lt;/span>[&lt;span style="color:#a6e22e">from&lt;/span>][&lt;span style="color:#a6e22e">msg&lt;/span>.&lt;span style="color:#a6e22e">sender&lt;/span>].&lt;span style="color:#a6e22e">sub&lt;/span>(&lt;span style="color:#a6e22e">tokens&lt;/span>);
+&lt;span style="color:#a6e22e">balances&lt;/span>[&lt;span style="color:#a6e22e">to&lt;/span>] &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#a6e22e">balances&lt;/span>[&lt;span style="color:#a6e22e">to&lt;/span>].&lt;span style="color:#a6e22e">add&lt;/span>(&lt;span style="color:#a6e22e">tokens&lt;/span>);
+&lt;span style="color:#a6e22e">emit&lt;/span> &lt;span style="color:#a6e22e">Transfer&lt;/span>(&lt;span style="color:#a6e22e">from&lt;/span>, &lt;span style="color:#a6e22e">to&lt;/span>, &lt;span style="color:#a6e22e">tokens&lt;/span>);
+&lt;span style="color:#66d9ef">return&lt;/span> &lt;span style="color:#66d9ef">true&lt;/span>;
+}
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>The first method can be used to manually set the &lt;code>newun&lt;/code> variable which
+is unitialized at the beginning and only the owner of the contract can
+invoke. This variable is indeed an important clue.&lt;/p>
+&lt;p>The initial clue regarding weird instruction and variable was about the
+variable and the &lt;code>require(to != nwun, &amp;quot;please wait&amp;quot;);&lt;/code> statement in the
+second method - &lt;code>transfer&lt;/code>. That method is used to do normal transfers
+between wallets. The require instruction is a common programming pattern
+to ensure the conditions are met before the code is executed. If the
+conditions are not met, the code should not proceed. In this case the
+first &lt;code>transfer&lt;/code> method contains a simple check:&lt;/p>
+&lt;pre>&lt;code>require(to != newun, &amp;quot;please wait&amp;quot;);
+&lt;/code>&lt;/pre>
+&lt;p>The condition is fulfilled if &lt;code>to&lt;/code> does not equal &lt;code>newun&lt;/code>. So basically
+it simply prevents sending funds to whatever address is behind variable
+&lt;code>newun&lt;/code>. At the very beginning when the contract is deployed the newun
+address is unitialized.&lt;/p>
+&lt;p>The third and fourth methods are the ones that are important as this is
+the part used by DEX, so PancakeSwap. &lt;code>approve&lt;/code> and &lt;code>transferFrom&lt;/code> are
+used to do the swap operation. &lt;code>transferFrom&lt;/code>, according to the ECR20 an
+BEP20 documentation, is used by 3rd parties to do transfers on user's
+behalf, so exactly what decentralized exchanges do during swapping. In
+this case the crucial part for the scam is the condition at the
+beginning of the &lt;code>transferFrom&lt;/code> function which is:&lt;/p>
+&lt;pre>&lt;code>function transferFrom(address from, address to, uint tokens) public returns (bool success) {
+if(from != address(0) &amp;amp;&amp;amp; newun == address(0)) newun = to;
+else require(to != newun, &amp;quot;please wait&amp;quot;);
+...
+}
+&lt;/code>&lt;/pre>
+&lt;p>The code uses the condition to set &lt;code>newun&lt;/code> variable and &lt;code>require&lt;/code>
+instruction to block the processing of the function. To easier analyse
+it here is a more readable (Java-like) snippet.&lt;/p>
+&lt;pre>&lt;code>// If somebody (not 0x0) sends funds and newun is 0x0, initialize it to the address of the recipient
+if(from != address(0) &amp;amp;&amp;amp; newun == address(0)) {
+newun = to;
+}
+else {
+// Block if funds are transferred to address same as in newun
+require(to != newun, &amp;quot;please wait&amp;quot;);
+}
+&lt;/code>&lt;/pre>
+&lt;p>What this code basicaly does can be described:&lt;/p>
+&lt;ul>
+&lt;li>when the &lt;code>from&lt;/code> address is not &lt;code>0x0&lt;/code> and &lt;code>newun&lt;/code> is set to &lt;code>0x0&lt;/code>,
+initialize the &lt;code>newun&lt;/code> variable and set it to &lt;code>to&lt;/code> paramter
+&lt;ul>
+&lt;li>otherwise make sure the processing is stopped if the funds are
+sent to the address stored in &lt;code>newun&lt;/code> variable&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;p>The require statement is exactly the same mechanism as in the &lt;code>transfer&lt;/code>
+method, so to prevent sending funds to some address. However, that
+address is nowhere in the code initially, instead it is set during the
+peculiar moment in time, during the first invocation of the
+&lt;code>transferFrom&lt;/code> method and when the from address is not &lt;code>0x0&lt;/code> or at any
+point in time when the owner of the contract invokes manually
+&lt;code>transfernewun&lt;/code>, which only he can invoke. Those are two methods to set
+the address to some value and block transactions.&lt;/p>
+&lt;p>With this information and after reviewing the first transactions of
+SafeRocket token the following happens.&lt;/p>
+&lt;ol>
+&lt;li>Contract is created and the initial transfer is done, so max supply
+is transferred to the owner of the contract from &lt;code>0x0&lt;/code> address.
+Solidity developer could help me out here as I'm guessing this
+action involves &lt;code>transfer&lt;/code> method rather than &lt;code>transferFrom&lt;/code>, but
+anyway the newun variable is not initialized, the recipient is the
+owner of the contract so the transfer is successful.&lt;/li>
+&lt;li>The owner burns tokens by sending them to 0x&amp;hellip;dead address.&lt;/li>
+&lt;li>The owner does the very first PancakeSwap operation which (add
+liqudity), as described in general info about swapping, involves
+&lt;code>transferFrom&lt;/code> of the SCAMToken's contract while the &lt;code>newun&lt;/code>
+variable is not initialized. In this operation the &lt;code>from&lt;/code> address is
+not &lt;code>0x0&lt;/code>, it is set to the address of a wallet of the owner and
+&lt;code>to&lt;/code> is the address of the Liquidity Pool. It results in setting the
+&lt;code>newun&lt;/code> address to PancakeSwap Liquidity Pool of SCAMToken's
+address.&lt;/li>
+&lt;li>From now on all &lt;code>transferFrom&lt;/code> operations where &lt;code>to&lt;/code> is set to
+PancakeSwap Liquidity Pool of SCAMToken's address will be blocked
+as this value is in &lt;code>newun&lt;/code> variable and statement
+&lt;code>require(to != newun, &amp;quot;please wait&amp;quot;)&lt;/code> in &lt;code>transfrFrom&lt;/code> method is
+blocked.&lt;/li>
+&lt;/ol>
+&lt;h1 id="thanks--final-thoughts">Thanks &amp;amp; Final thoughts&lt;/h1>
+&lt;ul>
+&lt;li>thanks to TokenSniffer for giving a lead on this scam&lt;/li>
+&lt;li>thanks to Solidity devs: A, B for checking the content&lt;/li>
+&lt;li>msg &lt;a href="https://twitter.com/cryptot3ddybear">@cryptot3ddybear&lt;/a> on Twitter if you found a scam and want to know how it works
+or increase your chances to not fell for it again&lt;/li>
+&lt;/ul>
+&lt;h1 id="buy-a-coffee">Buy a coffee&lt;/h1>
+&lt;p>Found it useful? Learnt something? Saved your moeny? Buy a coffee:&lt;/p>
+&lt;pre>&lt;code>MetaMask Wallet address (Etherum, BSC)
+0xD9Da5Fd5B049Da96e8C51738Ea93501f2e414EE6
+&lt;/code>&lt;/pre>
+&lt;img src="/img/cryptoteddybear-wallet-Etherum_BSC.png" alt="Coffee &amp;amp; Scam Analysis Fund" class="center" style="border-radius: 8px;" /></content></item><item><title>BSC-SCAM: PancakeSwap NoApproval</title><link>/posts/scam-explained-bsc-noapproval/</link><pubDate>Thu, 08 Apr 2021 22:17:00 +0000</pubDate><guid>/posts/scam-explained-bsc-noapproval/</guid><description>A guide for crypto traders and a technical analysis of a popular Binance Smart Chain smart contract scam resulting in an inability to Approve swapping on PancakeSwap.
+LINK to the original write-up.
+Final thoughts msg me@Twitter if you found a scam and want to know how it works or increase your chances to not fell for it again Buy a coffee Found it useful? Learnt something? Saved your moeny?</description><content>&lt;p>A guide for crypto traders and a technical analysis of a popular
+Binance Smart Chain smart contract scam resulting in an inability
+to Approve swapping on PancakeSwap.&lt;/p>
+&lt;p>&lt;a href="https://gist.github.com/cryptoteddybear/9f771ec284c3cbf70486cc2087b4deb7">LINK&lt;/a> to the original write-up.&lt;/p>
+&lt;h1 id="final-thoughts">Final thoughts&lt;/h1>
+&lt;ul>
+&lt;li>msg &lt;a href="https://twitter.com/cryptot3ddybear">me@Twitter&lt;/a> if you found a scam and want to know how it works
+or increase your chances to not fell for it again&lt;/li>
+&lt;/ul>
+&lt;h1 id="buy-a-coffee">Buy a coffee&lt;/h1>
+&lt;p>Found it useful? Learnt something? Saved your moeny? Buy a coffee:&lt;/p>
+&lt;pre>&lt;code>MetaMask Wallet address (Etherum, BSC)
+0xD9Da5Fd5B049Da96e8C51738Ea93501f2e414EE6
+&lt;/code>&lt;/pre>
+&lt;img src="/img/cryptoteddybear-wallet-Etherum_BSC.png" alt="Coffee &amp;amp; Scam Analysis Fund" class="center" style="border-radius: 8px;" /></content></item></channel></rss>
