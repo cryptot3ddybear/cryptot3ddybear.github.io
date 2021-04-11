@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>bsc on Blockchain Security Stories</title><link>https://cryptot3ddybear.github.io/tags/bsc/</link><description>Recent content in bsc on Blockchain Security Stories</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 11 Apr 2021 15:21:09 +0200</lastBuildDate><atom:link href="https://cryptot3ddybear.github.io/tags/bsc/index.xml" rel="self" type="application/rss+xml"/><item><title>BSC-SCAM: Stealthy Liquidity Pool Block on PancakeSwap</title><link>https://cryptot3ddybear.github.io/posts/scam-explained-bsc-stealthy-lp-block/</link><pubDate>Sun, 11 Apr 2021 15:21:09 +0200</pubDate><guid>https://cryptot3ddybear.github.io/posts/scam-explained-bsc-stealthy-lp-block/</guid><description>A guide for crypto traders and a technical analysis of a popular Binance Smart Chain smart contract scam resulting in an inability to swap a token back due to transferFrom error on PancakeSwap.
-Yesterday I received a message from TokenSniffer regarding another token SafeBinance with swapping issues and a clue that there is a weird instruction restricting somehow a to address in a transfer function.
-As it turns out the token might be a part of a bigger scam campaign and cool TokenSniffer's feature listed multiple similar tokens deployed during the last few days.</description><content>&lt;p>A guide for crypto traders and a technical analysis of a popular
+Yesterday I received a message from TokenSniffer regarding another token SafeBinance with swapping issues and a clue that there is a weird instruction restricting somehow a to address in a transfer function. As a result users received a strange error message like the on in the screenshot.</description><content>&lt;p>A guide for crypto traders and a technical analysis of a popular
 Binance Smart Chain smart contract scam resulting in an inability to swap
 a token back due to &lt;code>transferFrom&lt;/code> error on PancakeSwap.&lt;/p>
 &lt;p>Yesterday I received a message from TokenSniffer regarding another token
 &lt;em>SafeBinance&lt;/em> with swapping issues and a clue that there is a weird
-instruction restricting somehow a &lt;code>to&lt;/code> address in a &lt;code>transfer&lt;/code> function.&lt;/p>
+instruction restricting somehow a &lt;code>to&lt;/code> address in a &lt;code>transfer&lt;/code> function.
+As a result users received a strange error message like the on in the screenshot.&lt;/p>
+&lt;img src="https://cryptot3ddybear.github.io/img/bsc-scam-lpblock/transferfrom-error-smaller.jpg" alt="Error message indicating scam" class="center" style="border-radius: 8px;" />
 &lt;p>As it turns out the token might be a part of a bigger scam campaign and
 cool TokenSniffer's feature listed multiple similar tokens deployed
 during the last few days. Here are a few examples:&lt;/p>
@@ -63,7 +64,7 @@ recipient is different indicating that people are buying tokens only
 and nobody is actually swapping it back (also typical for fresh
 tokens where people tend to hold at the beginning)&lt;/li>
 &lt;li>&lt;strong>IMPORTANT&lt;/strong> go to BSCScan and the contract of the token, for
-instance in this SCAMEToken
+instance in this SCAMToken
 &lt;code>https://bscscan.com/address/0x331bb194dc931c79351234733d69dc0f6b8b482a#readContract&lt;/code>
 and look for &lt;code>newun&lt;/code> variable or any other variable (if scammer
 renames it) which is set to the address of the PancakeSwap Liquidity
@@ -112,10 +113,9 @@ to PancakeSwap: SomeToken Liquidity Pool (BNB buyer pays)
 From PancakeSwap Some Token Liquidity Pool
 to &amp;lt;buyer wallet address&amp;gt; (some number of SomeToken)
 &lt;/code>&lt;/pre>
-&lt;p>However, in details after a quick googling in the Logs tab in BscScan
-there are more specific actions which are titled
-&lt;code>Transaction Reciept Event Logs&lt;/code> and in short it lists the following 5
-events:&lt;/p>
+&lt;p>In the &lt;strong>Logs&lt;/strong> tab in BscScan there is even more details regarding the transcation
+and &lt;code>Transaction Receipt Event Logs&lt;/code> lists all events emitted by executed contracts' functions.
+In short it lists the following 5 events:&lt;/p>
 &lt;pre>&lt;code>1. Deposit BNB from buyer's wallet to PancakeSwap Router
 2. Transfer deposited BNB from PancakeSwap Router to PancakeSwap Liquidity Pool for SomeToken
 3. (IMPORTANT) Transfer form PancakeSwap Liquidity Pool for SomeToken to buyer's wallet
@@ -294,8 +294,8 @@ blocked.&lt;/li>
 &lt;/ol>
 &lt;h1 id="thanks--final-thoughts">Thanks &amp;amp; Final thoughts&lt;/h1>
 &lt;ul>
-&lt;li>thanks to TokenSniffer for giving a lead on this scam&lt;/li>
-&lt;li>thanks to Solidity devs: A, B for checking the content&lt;/li>
+&lt;li>thanks to &lt;a href="https://twitter.com/Token_Sniffer">TokenSniffer&lt;/a> for giving a lead on this scam, screenshots and validating the flow&lt;/li>
+&lt;li>thanks to Solidity devs: &lt;a href="http://linkedin.com/in/oleksiivinogradov">Alex Vinogradov&lt;/a> for validating the approve-transferFrom flow during add liquidity&lt;/li>
 &lt;li>msg &lt;a href="https://twitter.com/cryptot3ddybear">@cryptot3ddybear&lt;/a> on Twitter if you found a scam and want to know how it works
 or increase your chances to not fell for it again&lt;/li>
 &lt;/ul>
