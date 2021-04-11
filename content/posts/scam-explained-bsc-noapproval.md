@@ -31,3 +31,4 @@ Found it useful? Learnt something? Saved your moeny? Buy a coffee:
 
 
 {{< image src="/img/cryptoteddybear-wallet-Etherum_BSC.png" alt="Coffee & Scam Analysis Fund" position="center" style="border-radius: 8px;" >}}
+

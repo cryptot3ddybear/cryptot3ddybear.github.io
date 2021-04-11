@@ -18,7 +18,10 @@ a token back due to `transferFrom` error on PancakeSwap.
 
 Yesterday I received a message from TokenSniffer regarding another token
 *SafeBinance* with swapping issues and a clue that there is a weird
-instruction restricting somehow a `to` address in a `transfer` function.
+instruction restricting somehow a `to` address in a `transfer` function. 
+As a result users received a strange error message like the on in the screenshot.
+
+{{< image src="/img/bsc-scam-lpblock/transferfrom-error-smaller.jpg" alt="Error message indicating scam" position="center" style="border-radius: 8px;" >}}
 
 As it turns out the token might be a part of a bigger scam campaign and
 cool TokenSniffer\'s feature listed multiple similar tokens deployed
@@ -75,7 +78,7 @@ back his LP token with a profit.
     and nobody is actually swapping it back (also typical for fresh
     tokens where people tend to hold at the beginning)
 -   **IMPORTANT** go to BSCScan and the contract of the token, for
-    instance in this SCAMEToken
+    instance in this SCAMToken
     `https://bscscan.com/address/0x331bb194dc931c79351234733d69dc0f6b8b482a#readContract`
     and look for `newun` variable or any other variable (if scammer
     renames it) which is set to the address of the PancakeSwap Liquidity
@@ -128,10 +131,9 @@ the most crucial fields:
         From PancakeSwap Some Token Liquidity Pool 
                to <buyer wallet address> (some number of SomeToken)
 
-However, in details after a quick googling in the Logs tab in BscScan
-there are more specific actions which are titled
-`Transaction Reciept Event Logs` and in short it lists the following 5
-events:
+In the **Logs** tab in BscScan there is even more details regarding the transcation 
+and `Transaction Receipt Event Logs` lists all events emitted by executed contracts' functions. 
+In short it lists the following 5 events:
 
     1. Deposit BNB from buyer's wallet to PancakeSwap Router
     2. Transfer deposited BNB from PancakeSwap Router to PancakeSwap Liquidity Pool for SomeToken
@@ -340,8 +342,8 @@ SafeRocket token the following happens.
 
 # Thanks & Final thoughts
 
-- thanks to TokenSniffer for giving a lead on this scam
-- thanks to Solidity devs: A, B for checking the content
+- thanks to [TokenSniffer](https://twitter.com/Token_Sniffer) for giving a lead on this scam, screenshots and validating the flow
+- thanks to Solidity devs: [Alex Vinogradov](http://linkedin.com/in/oleksiivinogradov) for validating the approve-transferFrom flow during add liquidity
 - msg [@cryptot3ddybear](https://twitter.com/cryptot3ddybear) on Twitter if you found a scam and want to know how it works 
 or increase your chances to not fell for it again
 
