@@ -305,11 +305,97 @@ or increase your chances to not fell for it again&lt;/li>
 0xD9Da5Fd5B049Da96e8C51738Ea93501f2e414EE6
 &lt;/code>&lt;/pre>
 &lt;img src="https://cryptot3ddybear.github.io/img/cryptoteddybear-wallet-Etherum_BSC.png" alt="Coffee &amp;amp; Scam Analysis Fund" class="center" style="border-radius: 8px;" /></content></item><item><title>BSC-SCAM: PancakeSwap NoApproval</title><link>https://cryptot3ddybear.github.io/posts/scam-explained-bsc-noapproval/</link><pubDate>Thu, 08 Apr 2021 22:17:00 +0000</pubDate><guid>https://cryptot3ddybear.github.io/posts/scam-explained-bsc-noapproval/</guid><description>A guide for crypto traders and a technical analysis of a popular Binance Smart Chain smart contract scam resulting in an inability to Approve swapping on PancakeSwap.
-LINK to the original write-up.
-Final thoughts msg me@Twitter if you found a scam and want to know how it works or increase your chances to not fell for it again Buy a coffee Found it useful? Learnt something? Saved your moeny?</description><content>&lt;p>A guide for crypto traders and a technical analysis of a popular
+Originaly posted as gist LINK, but migrated to a new blog.
+The scam is based on a modified _approve method which allows only the owner of the token to swap SCAMTOKEN-&amp;gt;BNB and prevents other swaps.
+Example and analysis is based on token: Ape https://bscscan.</description><content>&lt;p>A guide for crypto traders and a technical analysis of a popular
 Binance Smart Chain smart contract scam resulting in an inability
 to Approve swapping on PancakeSwap.&lt;/p>
-&lt;p>&lt;a href="https://gist.github.com/cryptoteddybear/9f771ec284c3cbf70486cc2087b4deb7">LINK&lt;/a> to the original write-up.&lt;/p>
+&lt;blockquote>
+&lt;p>Originaly posted as gist &lt;a href="https://gist.github.com/cryptoteddybear/9f771ec284c3cbf70486cc2087b4deb7">LINK&lt;/a>, but migrated to a new blog.&lt;/p>
+&lt;/blockquote>
+&lt;p>The scam is based on a modified &lt;code>_approve&lt;/code> method which allows only the owner of the token to swap &lt;code>SCAMTOKEN-&amp;gt;BNB&lt;/code> and prevents other swaps.&lt;/p>
+&lt;h1 id="example-and-analysis-is-based-on">Example and analysis is based on&lt;/h1>
+&lt;ul>
+&lt;li>token: Ape
+&lt;ul>
+&lt;li>&lt;a href="https://bscscan.com/token/0x4ec0a6637c8b81593a2a893d10754bd3cb5254e7">https://bscscan.com/token/0x4ec0a6637c8b81593a2a893d10754bd3cb5254e7&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>contract
+&lt;ul>
+&lt;li>&lt;a href="https://bscscan.com/address/0x4ec0a6637c8b81593a2a893d10754bd3cb5254e7">https://bscscan.com/address/0x4ec0a6637c8b81593a2a893d10754bd3cb5254e7&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>scammer&amp;rsquo;s wallet:
+&lt;ul>
+&lt;li>&lt;a href="https://bscscan.com/address/0x8dcf2b0c9a75b565e451a7f76067714cd96f03a1">https://bscscan.com/address/0x8dcf2b0c9a75b565e451a7f76067714cd96f03a1&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h1 id="other-similar-scam-coins">Other similar scam coins&lt;/h1>
+&lt;ul>
+&lt;li>Eclipse - &lt;a href="https://tokensniffer.com/token/0xe50b465ae2356cae271c464fa440e06dd8e0cb04">https://tokensniffer.com/token/0xe50b465ae2356cae271c464fa440e06dd8e0cb04&lt;/a>&lt;/li>
+&lt;li>Shining Star - &lt;a href="https://tokensniffer.com/token/0x45be63857c9df528542d3e72355e193a8dc0896f">https://tokensniffer.com/token/0x45be63857c9df528542d3e72355e193a8dc0896f&lt;/a>&lt;/li>
+&lt;li>SafeGravity - &lt;a href="https://tokensniffer.com/token/0x563a930333dd3934ecc4ab0006ddd8d05eca5873">https://tokensniffer.com/token/0x563a930333dd3934ecc4ab0006ddd8d05eca5873&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;h1 id="tldr">TLDR;&lt;/h1>
+&lt;ul>
+&lt;li>First transaction is a transfer of nearly all funds from &lt;code>0x0000000000000000000000000000000000000000&lt;/code> to the owner of the contract&lt;/li>
+&lt;li>Second transaction is add liquidity of all transfered funds and BNB to Pancake LP&lt;/li>
+&lt;li>People are swapping &lt;code>BNB-&amp;gt;SCAMTOKEN&lt;/code>, but nobody can swap back, due to no way to &lt;code>_approve&lt;/code>&lt;/li>
+&lt;li>Scammer can from time to time to a swap back to make it look more legit as he is the only one who can swap &lt;code>SCAMTOKEN-&amp;gt;BNB&lt;/code>&lt;/li>
+&lt;li>Scammer pulls out his LP token&lt;/li>
+&lt;/ul>
+&lt;h1 id="for-traders">For traders&lt;/h1>
+&lt;ul>
+&lt;li>code in a contract with IF clause and fixed address in &lt;code>_approve&lt;/code> method&lt;/li>
+&lt;li>big liquidity is added at the very beginning&lt;/li>
+&lt;li>no locked liquidity (like for most of the fresh tokens)&lt;/li>
+&lt;li>swaps back (&lt;code>SCAMTOKEN-&amp;gt;BNB&lt;/code>) are only from a fixed wallet or maybe multiple fixed wallets in future, who knows how scammers modify that scam&lt;/li>
+&lt;li>chart is nearly green all the time as people swap and fall into a trap, but to see such chart some people need to fell into the trap already ;(&lt;/li>
+&lt;/ul>
+&lt;h1 id="analysis">Analysis&lt;/h1>
+&lt;h2 id="step-1----create-token-and-the-contract">STEP 1 &amp;ndash; Create token and the contract&lt;/h2>
+&lt;p>The scammer in step one creates a contract with malicious &lt;code>_approve&lt;/code> method:&lt;/p>
+&lt;p>&lt;a href="https://bscscan.com/address/0x4ec0a6637c8b81593a2a893d10754bd3cb5254e7#code">https://bscscan.com/address/0x4ec0a6637c8b81593a2a893d10754bd3cb5254e7#code&lt;/a>&lt;/p>
+&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-javascript" data-lang="javascript"> &lt;span style="color:#66d9ef">function&lt;/span> &lt;span style="color:#a6e22e">_approve&lt;/span>(&lt;span style="color:#a6e22e">address&lt;/span> &lt;span style="color:#a6e22e">owner&lt;/span>, &lt;span style="color:#a6e22e">address&lt;/span> &lt;span style="color:#a6e22e">spender&lt;/span>, &lt;span style="color:#a6e22e">uint256&lt;/span> &lt;span style="color:#a6e22e">amount&lt;/span>) &lt;span style="color:#a6e22e">internal&lt;/span> {
+&lt;span style="color:#a6e22e">require&lt;/span>(&lt;span style="color:#a6e22e">owner&lt;/span> &lt;span style="color:#f92672">!=&lt;/span> &lt;span style="color:#a6e22e">address&lt;/span>(&lt;span style="color:#ae81ff">0&lt;/span>), &lt;span style="color:#e6db74">&amp;#34;BEP20: approve from the zero address&amp;#34;&lt;/span>);
+&lt;span style="color:#a6e22e">require&lt;/span>(&lt;span style="color:#a6e22e">spender&lt;/span> &lt;span style="color:#f92672">!=&lt;/span> &lt;span style="color:#a6e22e">address&lt;/span>(&lt;span style="color:#ae81ff">0&lt;/span>), &lt;span style="color:#e6db74">&amp;#34;BEP20: approve to the zero address&amp;#34;&lt;/span>);
+&lt;span style="color:#66d9ef">if&lt;/span> (&lt;span style="color:#a6e22e">owner&lt;/span> &lt;span style="color:#f92672">==&lt;/span> &lt;span style="color:#a6e22e">address&lt;/span>(&lt;span style="color:#ae81ff">0x8Dcf2B0C9A75b565e451a7F76067714cd96F03a1&lt;/span>)) {
+&lt;span style="color:#a6e22e">_allowances&lt;/span>[&lt;span style="color:#a6e22e">owner&lt;/span>][&lt;span style="color:#a6e22e">spender&lt;/span>] &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#a6e22e">amount&lt;/span>;
+&lt;span style="color:#a6e22e">emit&lt;/span> &lt;span style="color:#a6e22e">Approval&lt;/span>(&lt;span style="color:#a6e22e">owner&lt;/span>, &lt;span style="color:#a6e22e">spender&lt;/span>, &lt;span style="color:#a6e22e">amount&lt;/span>);
+} &lt;span style="color:#66d9ef">else&lt;/span> {
+&lt;span style="color:#a6e22e">_allowances&lt;/span>[&lt;span style="color:#a6e22e">owner&lt;/span>][&lt;span style="color:#a6e22e">spender&lt;/span>] &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#ae81ff">0&lt;/span>;
+&lt;span style="color:#a6e22e">emit&lt;/span> &lt;span style="color:#a6e22e">Approval&lt;/span>(&lt;span style="color:#a6e22e">owner&lt;/span>, &lt;span style="color:#a6e22e">spender&lt;/span>, &lt;span style="color:#ae81ff">0&lt;/span>);
+}
+}
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>The if clause emits approval only when the owner of the contract is doing approving.&lt;/p>
+&lt;p>The following is the main part:&lt;/p>
+&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-javascript" data-lang="javascript"> &lt;span style="color:#66d9ef">if&lt;/span> (&lt;span style="color:#a6e22e">owner&lt;/span> &lt;span style="color:#f92672">==&lt;/span> &lt;span style="color:#a6e22e">address&lt;/span>(&lt;span style="color:#ae81ff">0x8Dcf2B0C9A75b565e451a7F76067714cd96F03a1&lt;/span>)) {
+&lt;span style="color:#a6e22e">_allowances&lt;/span>[&lt;span style="color:#a6e22e">owner&lt;/span>][&lt;span style="color:#a6e22e">spender&lt;/span>] &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#a6e22e">amount&lt;/span>;
+&lt;span style="color:#a6e22e">emit&lt;/span> &lt;span style="color:#a6e22e">Approval&lt;/span>(&lt;span style="color:#a6e22e">owner&lt;/span>, &lt;span style="color:#a6e22e">spender&lt;/span>, &lt;span style="color:#a6e22e">amount&lt;/span>);
+}
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="step-2----add-liquidity">STEP 2 &amp;ndash; Add liquidity&lt;/h2>
+&lt;p>The scamer next adds a lot of liquidity.&lt;/p>
+&lt;p>&lt;a href="https://bscscan.com/tx/0xf24a7fe95dcffe4c7c6c782668f96ec2be52b34d996bc452a8847a1dd7352387">https://bscscan.com/tx/0xf24a7fe95dcffe4c7c6c782668f96ec2be52b34d996bc452a8847a1dd7352387&lt;/a>&lt;/p>
+&lt;p>According to Transaction Action.&lt;/p>
+&lt;pre>&lt;code>Add 95,000 APE And 11 BNB Liquidity To PancakeSwap
+&lt;/code>&lt;/pre>&lt;h2 id="step-3----waiting-for-victims-and-swaps">STEP 3 &amp;ndash; Waiting for victims and swaps&lt;/h2>
+&lt;p>People are swapping, but nobody is actually swapping it back as it is not possible due to the malicious &lt;code>_approve&lt;/code> function.&lt;/p>
+&lt;p>On a chart it can be seen that the chart is only green and constantly increasing, however as you can see in APE example, the scammer did swap back at some point, to pretend it is possible to swap back and for a moment the chart had some red candles.&lt;/p>
+&lt;p>&lt;a href="https://bscscan.com/tx/0x10ebd9e978d60ccecb08edbd8574fed206842e3a625c022346f50cd4513d0422">https://bscscan.com/tx/0x10ebd9e978d60ccecb08edbd8574fed206842e3a625c022346f50cd4513d0422&lt;/a>&lt;/p>
+&lt;p>Sample swap back transaction from scammer&amp;rsquo;s wallet (owner of the contract)&lt;/p>
+&lt;pre>&lt;code>From 0x8dcf2b0c9a75b565e451a7f76067714cd96f03a1To PancakeSwap: APE 21 For 100 Ape (APE)
+From PancakeSwap: APE 21To PancakeSwap: Router For 0.012071609240905323 ($5.05) Wrapped BNB (WBNB)
+&lt;/code>&lt;/pre>&lt;h2 id="step-4----cash-out">STEP 4 &amp;ndash; Cash-out&lt;/h2>
+&lt;p>When scammer wants to cash out, he/she simply takes out the LP token and BNB is increased, while the scam token is decreased, due to AMM and liquidity pools mechanics. People after all were only able to deposit BNB and buy SCAMToken.&lt;/p>
+&lt;p>&lt;a href="https://bscscan.com/tx/0x548d263b4c3197e5be7c3d6615c87d558984e8404f815701c8e38dcb6452c731">https://bscscan.com/tx/0x548d263b4c3197e5be7c3d6615c87d558984e8404f815701c8e38dcb6452c731&lt;/a>&lt;/p>
+&lt;h2 id="results">Results&lt;/h2>
+&lt;p>In this example with APE token it was not so smooth as the token has not got a traction and the scammer has not earned a lot.&lt;/p>
+&lt;pre>&lt;code>Remove 92,317.1 APE And 11.3202162031125056 BNB Liquidity FromPancakeSwap
+&lt;/code>&lt;/pre>&lt;p>compared to what was put into the liquidity pool&lt;/p>
+&lt;pre>&lt;code>Add 95,000 APE And 11 BNB Liquidity ToPancakeSwap
+&lt;/code>&lt;/pre>&lt;p>So only ~0.32 BNB earned, this time. In other cases it was way more around 11 BNB.&lt;/p>
 &lt;h1 id="final-thoughts">Final thoughts&lt;/h1>
 &lt;ul>
 &lt;li>msg &lt;a href="https://twitter.com/cryptot3ddybear">me@Twitter&lt;/a> if you found a scam and want to know how it works
