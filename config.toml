@@ -30,25 +30,25 @@ paginate = 5
   # If you use git, you can set `enableGitInfo` to `true` and then post will automatically get the last updated
   showLastUpdated = false
   # Provide a string as a prefix for the last update date. By default, it looks like this: 2020-xx-xx [Updated: 2020-xx-xx] :: Author
-  # updatedDatePrefix = "Updated"
+  #updatedDatePrefix = "Updated"
 
   # set all headings to their default size (depending on browser settings)
   # it's set to `true` by default
-  # oneHeadingSize = false
+   oneHeadingSize = false
 
 [params.twitter]
   # set Twitter handles for Twitter cards
   # see https://developer.twitter.com/en/docs/tweets/optimize-with-cards/guides/getting-started#card-and-content-attribution
   # do not include @
-  creator = "cryptoteddybea1"
-  site = "https://twitter.com/cryptoteddybea1"
+  creator = "cryptot3ddybear"
+  site = "https://twitter.com/cryptot3ddybear"
 
 [languages]
   [languages.en]
     languageName = "English"
     title = "Blockchain Security Stories"
     subtitle = "Blockchain stories, scams, security, development"
-    owner = "cryptoteddybear"
+    owner = "cryptot3ddybear"
     keywords = "blockchain"
     copyright = ""
     menuMore = "Show more"
@@ -63,8 +63,12 @@ paginate = 5
       logoText = "Blockchain Security Stories"
       logoHomeLink = "/"
 
-    #[languages.en.menu]
-    #  [[languages.en.menu.main]]
-    #    identifier = "about"
-    #    name = "About"
-    #    url = "/about"
+    [languages.en.menu]
+      [[languages.en.menu.main]]
+        identifier = "twitter"
+        name = "@twitter"
+        url = "https://twitter.com/cryptot3ddybear"
+      [[languages.en.menu.main]]
+        identifier = "github"
+        name = "@github"
+        url = "https://github.com/cryptot3ddybear"
